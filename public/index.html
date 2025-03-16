@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>智能教室节能系统 - 原型示例</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <!-- 顶部导航栏 -->
+  <header class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <img src="https://via.placeholder.com/40" alt="logo" class="h-8 w-8">
+        <span class="text-xl font-bold">智能教室节能系统</span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <span class="text-gray-500">积分: <strong>2580</strong></span>
+        <img src="https://via.placeholder.com/32" alt="user-avatar" class="rounded-full">
+      </div>
+    </div>
+  </header>
+
+  <!-- 主体内容区域 -->
+  <main class="max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+    
+    <!-- 左侧(或上方) 大区块：实时数据/图表/节能建议等 -->
+    <div class="lg:col-span-2 space-y-6">
+      <!-- 实时监测数据卡片 -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-semibold mb-4">实时监测数据</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+          <div>
+            <div class="text-gray-500">温度(°C)</div>
+            <div class="text-2xl font-bold" id="tempValue">--</div>
+          </div>
+          <div>
+            <div class="text-gray-500">湿度(%)</div>
+            <div class="text-2xl font-bold" id="humiValue">--</div>
+          </div>
+          <div>
+            <div class="text-gray-500">光照(lux)</div>
+            <div class="text-2xl font-bold" id="lightValue">--</div>
+          </div>
+          <div>
+            <div class="text-gray-500">有人检测</div>
+            <div class="text-2xl font-bold" id="humanDetect">--</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 能耗曲线图表区域 -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-semibold mb-4">能耗曲线</h2>
+        <div id="energyChart" class="h-64 flex items-center justify-center bg-gray-50 rounded">
+          <span class="text-gray-400">这里将显示能耗统计图表</span>
+        </div>
+      </div>
+
+      <!-- 今日节能建议 -->
+       
+        <button id="btn-get-ai" class="bg-blue-500 text-white px-4 py-2 rounded">获取AI建议</button>
+        <div id="ai-suggestion" class="mt-4 bg-white p-4 rounded shadow text-gray-700"></div>
+
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-semibold mb-4">今日节能建议</h2>
+        <ul class="space-y-2 text-gray-600">
+          <li>1. 空调温度设置建议在 26°C 左右</li>
+          <li>2. 教室无人且光照充足时自动关闭照明</li>
+          <li>3. 门窗未关闭时自动提醒并降低空调能耗</li>
+          <li>4. 合理使用插座管理，减少待机能耗</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 右侧(或下方) 辅助区块：当日节能、排行榜、设置等 -->
+    <div class="space-y-6">
+      <!-- 今日任务/节能贡献 -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-semibold mb-4">今日任务</h2>
+        <ul class="space-y-2 text-gray-600">
+          <li>● 关闭空调 +10 积分</li>
+          <li>● 关闭照明 +5 积分</li>
+          <li>● 关闭无人设备 +15 积分</li>
+        </ul>
+      </div>
+
+      <!-- 节能排行榜 -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-semibold mb-4">节能排行榜</h2>
+        <ol class="list-decimal list-inside space-y-1 text-gray-600">
+          <li>张三 - 3250 分</li>
+          <li>李四 - 2800 分</li>
+          <li>王子涵 - 2400 分</li>
+        </ol>
+      </div>
+
+      <!-- 时间段/自动控制设置（占位） -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-semibold mb-4">自动控制设置</h2>
+        <p class="text-gray-600 text-sm mb-2">这里可以设置自动关闭设备的时间段：</p>
+        <div class="flex items-center space-x-2 mb-4">
+          <label for="startTime" class="text-gray-700">开始:</label>
+          <input type="time" id="startTime" class="border border-gray-300 rounded px-2 py-1">
+          <label for="endTime" class="text-gray-700">结束:</label>
+          <input type="time" id="endTime" class="border border-gray-300 rounded px-2 py-1">
+        </div>
+        <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">保存设置</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- 底部区域 -->
+  <footer class="text-center text-gray-500 py-4">
+    <p>智能教室节能系统 © 2025</p>
+  </footer>
+
+  <!-- 通过定时请求后端API获取传感器数据（模拟） -->
+  <script>
+    function fetchSensorData() {
+      fetch('/api/sensors')
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('tempValue').textContent = data.temperature;
+          document.getElementById('humiValue').textContent = data.humidity;
+          document.getElementById('lightValue').textContent = data.light;
+          document.getElementById('humanDetect').textContent = data.humanDetect;
+        })
+        .catch(err => console.error('获取传感器数据失败:', err));
+    }
+
+    // 每3秒请求一次
+    setInterval(fetchSensorData, 3000);
+    // 页面加载时先获取一次
+    fetchSensorData();
+
+  document.getElementById('btn-get-ai').addEventListener('click', () => {
+    fetch('/api/ai-suggestion')
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('ai-suggestion');
+        if (data.suggestion) {
+          container.textContent = data.suggestion;
+        } else {
+          container.textContent = '无法获取AI建议。';
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('ai-suggestion').textContent = '请求出错，请稍后重试。';
+      });
+  });
+
+
+  </script>
+</body>
+</html>
