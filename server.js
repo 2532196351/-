@@ -32,10 +32,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // =========== OpenAI 配置 ===========
 // 注意：请将 YOUR_OPENAI_API_KEY 替换为你的实际 API Key，或从环境变量读取
+const { Configuration, OpenAIApi } = require('openai');
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
+
 
 // =========== 模拟的传感器接口 (仅示例) =========== 
 app.get('/api/sensors', (req, res) => {
@@ -95,6 +97,7 @@ app.get('/api/ai-suggestion', async (req, res) => {
 });
 
 // 启动服务器
+
 app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
